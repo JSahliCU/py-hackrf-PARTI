@@ -1,7 +1,7 @@
 import usb
 import struct
 import logging
-import hackrf 
+import core.hackrf 
 logger = logging.getLogger('HackRf SI5351C')
 logger.setLevel(logging.DEBUG)
 
@@ -34,4 +34,4 @@ class SI5351C():
 	def display_registers(self):
 		for register in range(255):
 			value = self.read_register(register)
-			print "Register [%d] Value [%d]" % (register, value)
+			print("Register [%d] Value [%d]" % (register, value))

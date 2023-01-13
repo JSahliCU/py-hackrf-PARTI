@@ -3,9 +3,9 @@ import usb
 import struct
 import array
 import logging
-from max2837 import Max2837
-from si5351c import SI5351C
-from rffc5071 import RFFC5071
+from core.max2837 import Max2837
+from core.si5351c import SI5351C
+from core.rffc5071 import RFFC5071
 
 logging.basicConfig()
 logger = logging.getLogger('HackRf Core')
@@ -26,7 +26,7 @@ def get_serial(serial_array):
 		return result
 
 def print_bytes(struct):
-	print "".join(["/x%02x" % ord(c) for c in struct]) #
+	print ("".join(["/x%02x" % ord(c) for c in struct])) #
 
 
 HackRfVendorRequest = enum(

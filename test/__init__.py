@@ -26,7 +26,7 @@ class TestHackRf(unittest.TestCase):
 
     def test_get_board_serial_number(self):
         result = self.hackrf.get_board_serial_number()
-        print result
+        print(result)
         self.assertTrue(len(result) == 4)
 
     def test_set_baseband_filter_bandwidth(self):

@@ -5,8 +5,8 @@ import sys
 
 def banner():
 	''' Display the information banner '''
-	print 'Welcome to Py-HackRf, to run unit tests run the following command:'
-	print 'python . test'
+	print('Welcome to Py-HackRf, to run unit tests run the following command:')
+	print('python . test')
 
 args = sys.argv
 if len(args) >= 2: 

@@ -1,1 +1,1 @@
-from hackrf import *
+from core.hackrf import *
