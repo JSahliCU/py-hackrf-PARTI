@@ -1,7 +1,7 @@
 import usb
 import struct
 import logging
-import core.hackrf 
+import hackrf 
 logger = logging.getLogger('HackRf RFFC5071')
 logger.setLevel(logging.DEBUG)
 

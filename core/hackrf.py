@@ -3,9 +3,9 @@ import usb
 import struct
 import array
 import logging
-from core.max2837 import Max2837
-from core.si5351c import SI5351C
-from core.rffc5071 import RFFC5071
+from max2837 import Max2837
+from si5351c import SI5351C
+from rffc5071 import RFFC5071
 
 logging.basicConfig()
 logger = logging.getLogger('HackRf Core')
@@ -56,7 +56,7 @@ HackRfConstants = enum(
 	HACKRF_DEVICE_OUT = 0x40,
 	HACKRF_DEVICE_IN = 0xC0,
 	HACKRF_USB_VID = 0x1d50,
-	HACKRF_USB_PID = 0x604b,
+	HACKRF_USB_PID = 0x6089,
 	HACKRF_SUCCESS = 0,
 	#Python defaults to returning none 
 	HACKRF_ERROR = None)
@@ -72,7 +72,8 @@ class HackRf():
 	''' This is the base object for the HackRf Device, and interaction with it '''
 	__JELLYBEAN__ = 'Jellybean'
 	__JAWBREAKER__ = 'Jawbreaker'
-	NAME_LIST = [__JELLYBEAN__, __JAWBREAKER__]
+	__HACK_RF_ONE__ = 'HackRF One'
+	NAME_LIST = [__JELLYBEAN__, __JAWBREAKER__, __HACK_RF_ONE__]
 
 	def __init__(self):
 		self.name = None
@@ -92,7 +93,7 @@ class HackRf():
 			self.si5351c = SI5351C(self)
 			self.rffc5071 = RFFC5071(self)
 			board_id = self.get_board_id()
-			if isinstance( board_id, ( int, long )):
+			if isinstance( board_id, (int)):
 				self.name = self.NAME_LIST[board_id]
 				logger.debug('Successfully setup HackRf device')
 
@@ -153,7 +154,7 @@ class HackRf():
 			Possible values: 1.75/2.5/3.5/5/5.5/6/7/8/9/10/12/14/15/20/24/28MHz,
 			default < sample_rate_hz. 
 		'''
-		if isinstance( bandwidth_hz, ( int, long )):
+		if isinstance( bandwidth_hz, (int)):
 			result = self.device.ctrl_transfer(HackRfConstants.HACKRF_DEVICE_OUT,
 				HackRfVendorRequest.HACKRF_VENDOR_REQUEST_BASEBAND_FILTER_BANDWIDTH_SET,
 				bandwidth_hz & 0xffff,
@@ -168,9 +169,9 @@ class HackRf():
 
 	def set_frequency(self, freq_hz):
 		''' Sets the frequency in hz '''
-		if isinstance( freq_hz, ( int, long )):
-			l_freq_mhz = (freq_hz / FREQ_ONE_MHZ)
-			l_freq_hz = (freq_hz - (l_freq_mhz * FREQ_ONE_MHZ));
+		if isinstance( freq_hz, ( int)):
+			l_freq_mhz = int(freq_hz / FREQ_ONE_MHZ)
+			l_freq_hz = int(freq_hz - (l_freq_mhz * FREQ_ONE_MHZ));
 
 			logger.debug('Frequency [%d] Mhz | [%d] Hz', l_freq_mhz, l_freq_hz)
 
@@ -195,7 +196,7 @@ class HackRf():
 
 	def set_sample_rate(self, freq, div):
 		''' Sets the sample rate of the hack rf device '''
-		if isinstance( freq, ( int, long )) and isinstance( div, ( int, long )):
+		if isinstance( freq, int) and isinstance( div, int):
 			#Make a C struct with the values
 			p =  struct.pack('>II', freq, div)
 
@@ -215,7 +216,7 @@ class HackRf():
 
 	def set_lna_gain(self, gain):
 		''' Sets the LNA gain, in 8Db steps, maximum value of 40 '''
-		if isinstance( gain, ( int, long ) ):
+		if isinstance( gain, int ):
 			if int(gain) <= 40:
 				result = self.device.ctrl_transfer(HackRfConstants.HACKRF_DEVICE_IN,
 					HackRfVendorRequest.HACKRF_VENDOR_REQUEST_SET_LNA_GAIN,
@@ -234,7 +235,7 @@ class HackRf():
 
 	def set_vga_gain(self, gain):
 		''' Sets the vga gain, in 2db steps, maximum value of 62 '''
-		if isinstance( gain, ( int, long ) ):
+		if isinstance( gain, int ):
 			if int(gain) <= 62:
 				result = self.device.ctrl_transfer(HackRfConstants.HACKRF_DEVICE_IN,
 					HackRfVendorRequest.HACKRF_VENDOR_REQUEST_SET_VGA_GAIN,
@@ -253,7 +254,7 @@ class HackRf():
 
 	def set_txvga_gain(self, gain):
 		''' Sets the txvga gain, in 1db steps, maximum value of 47 '''
-		if isinstance( gain, ( int, long ) ):
+		if isinstance( gain, int ):
 			if int(gain) <= 47:
 				result = self.device.ctrl_transfer(HackRfConstants.HACKRF_DEVICE_IN,
 					HackRfVendorRequest.HACKRF_VENDOR_REQUEST_SET_TXVGA_GAIN,

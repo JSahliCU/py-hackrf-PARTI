@@ -1,4 +1,8 @@
-from core import HackRf
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
+
+from hackrf import *
+
 from test import TestHackRf
 import unittest
 import sys
