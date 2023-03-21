@@ -77,7 +77,9 @@ HackRfVendorRequest = enum(
 	USB_VENDOR_REQUEST_READ_BOARD_REV = 45,
 	USB_VENDOR_REQUEST_READ_SUPPORTED_PLATFORM = 46,
 	USB_VENDOR_REQUEST_SET_LEDS = 47,
-	USB_VENDOR_REQUEST_SET_GPIO = 48,)
+	USB_VENDOR_REQUEST_SET_GPIO = 48,
+	USB_VENDOR_REQUEST_SET_I2C_SPLIT = 49,
+	USB_VENDOR_REQUEST_SET_I2C_SOLID = 50)
 
 HackRfConstants = enum(
 	HACKRF_DEVICE_OUT = 0x40,
@@ -352,6 +354,7 @@ class HackRf():
 		# 		2: GPIO_3_15,
 		# 		3: GPIO_3_12,
 		# 		4: GPIO_3_13 
+
 		if pin_number in range(5):
 			self.device.ctrl_transfer(HackRfConstants.HACKRF_DEVICE_OUT,
 			HackRfVendorRequest.USB_VENDOR_REQUEST_SET_GPIO,
@@ -359,3 +362,16 @@ class HackRf():
 			pin_number)
 		else:
 			logger.warning('Invalid Pin Number [%d]' % pin_number)
+
+	def write_split(self, value):
+		self.device.ctrl_transfer(HackRfConstants.HACKRF_DEVICE_OUT,
+			HackRfVendorRequest.USB_VENDOR_REQUEST_SET_I2C_SPLIT,
+			value,
+			0)
+		
+	def write_solid(self, value):
+		self.device.ctrl_transfer(HackRfConstants.HACKRF_DEVICE_OUT,
+			HackRfVendorRequest.USB_VENDOR_REQUEST_SET_I2C_SOLID,
+			value,
+			0)
+
